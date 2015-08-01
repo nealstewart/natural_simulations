@@ -74,35 +74,51 @@ Head.prototype.checkEdges = function() {
   }
 };
 
-var Creature = function() {
-  this.head = new Head(new PVector(500/2, 500/2));
-
-  this.position = getPositionBehind(this.head.position, this.head.velocity); 
-  this.velocity = this.getInitialVelocity();
+var Part = function(leader) {
+  this.leader = leader;
+  this.position = getPositionBehind(leader.position, leader.velocity); 
   this.acceleration = new PVector(0, 0);
-
-  this.downForce = new PVector(0, 4);
+  this.velocity = this.getInitialVelocity();
 };
 
-// TODO: Make this perpendicular to the velocity of the head.
-Creature.prototype.getInitialVelocity = function() {
+// TODO: Make this perpendicular to the velocity of the leader.
+Part.prototype.getInitialVelocity = function() {
   return new PVector(-20, 0)
 };
 
 var SPRING_CONSTANT = 0.10;
-
-Creature.prototype.getSpringForce = function() {
-  var acc = PVector.sub(this.head.position, this.position);
+Part.prototype.getSpringForce = function() {
+  var acc = PVector.sub(this.leader.position, this.position);
   
   acc.mult(SPRING_CONSTANT);
 
   return acc;
 };
 
-Creature.prototype.getForces = function() {
-  return [
-    this.getSpringForce()
-  ];
+Part.prototype.update = function() {
+  var that = this;
+
+  that.velocity.add(this.getSpringForce());
+  this.velocity.limit(20);
+
+  this.position.add(this.velocity);
+};
+
+Part.prototype.display = function() {
+  ellipse(this.position.x, this.position.y, 48, 48);
+};
+
+var Creature = function() {
+  this.head = new Head(new PVector(500/2, 500/2));
+
+  this.parts = [new Part(this.head)]
+  var prevPart = this.parts[0];
+
+  for (var i = 0; i < 10; i++) {
+    var newPart = new Part(prevPart);
+    prevPart = newPart;
+    this.parts.push(newPart);
+  }
 };
 
 Creature.prototype.update = function() {
@@ -110,23 +126,21 @@ Creature.prototype.update = function() {
 
   this.head.update();
 
-  this.getForces().forEach(function(f) {
-      that.velocity.add(f);
+  this.parts.forEach(function(p) {
+    p.update();
   });
-
-  this.velocity.limit(20);
-
-  this.position.add(this.velocity);
 };
 
 Creature.prototype.display = function() {
   stroke(0);
   strokeWeight(2);
   fill(127);
-  ellipse(this.position.x, this.position.y, 48, 48);
-  this.head.display();
-};
 
+  this.head.display();
+  for (var i = 0, len = this.parts.length; i < len; i++) {
+    this.parts[i].display();
+  }
+};
 
 var creature = new Creature();
 
