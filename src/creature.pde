@@ -120,7 +120,6 @@ Part.prototype.bounce = function(p) {
     repulsion.mult(BOUNCE_FORCE);
 
     p.forces.push(repulsion);
-    debugger;
   }
 };
 
