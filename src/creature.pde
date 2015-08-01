@@ -5,7 +5,7 @@ var STATES = {
 
 var BUBBLE_FORCE = 0.5;
 
-var BEHIND_ADJUSTMENT = 100;
+var BEHIND_ADJUSTMENT = 5;
 
 function getPositionBehind(position, velocity) {
   var position = position.get()
@@ -39,7 +39,7 @@ Head.prototype.update = function() {
 };
 
 Head.prototype.display = function() {
-  //ellipse(this.position.x, this.position.y, 48, 48);
+  ellipse(this.position.x, this.position.y, 48, 48);
 };
 
 Head.prototype.checkEdges = function() {
@@ -74,11 +74,13 @@ Head.prototype.checkEdges = function() {
   }
 };
 
+var PART_SIZE = 5;
 var Part = function(leader) {
   this.leader = leader;
   this.position = getPositionBehind(leader.position, leader.velocity); 
   this.acceleration = new PVector(0, 0);
   this.velocity = this.getInitialVelocity();
+  this.resetForces();
 };
 
 // TODO: Make this perpendicular to the velocity of the leader.
@@ -95,17 +97,47 @@ Part.prototype.getSpringForce = function() {
   return acc;
 };
 
+Part.prototype.resetForces = function() {
+  this.forces = [];
+};
+
+Part.prototype.addLeaderForce = function() {
+  this.forces.push(this.getSpringForce());
+};
+
+var BOUNCE_FORCE = 5;
+
+Part.prototype.bounce = function(p) {
+  if (this === p) {
+    return;
+  }
+
+  var dist = PVector.sub(this.position, p.position);
+
+  if (dist.mag() < PART_SIZE) {
+    var repulsion = dist.get();
+    repulsion.normalize();
+    repulsion.mult(BOUNCE_FORCE);
+
+    p.forces.push(repulsion);
+    debugger;
+  }
+};
+
 Part.prototype.update = function() {
   var that = this;
 
-  that.velocity.add(this.getSpringForce());
+  this.forces.forEach(function(f) {
+    that.velocity.add(f);
+  });
+
   this.velocity.limit(20);
 
   this.position.add(this.velocity);
 };
 
 Part.prototype.display = function() {
-  ellipse(this.position.x, this.position.y, 48, 48);
+  ellipse(this.position.x, this.position.y, PART_SIZE, PART_SIZE);
 };
 
 var Creature = function() {
@@ -114,19 +146,37 @@ var Creature = function() {
   this.parts = [new Part(this.head)]
   var prevPart = this.parts[0];
 
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < 300; i++) {
     var newPart = new Part(prevPart);
     prevPart = newPart;
     this.parts.push(newPart);
   }
+
+  this.lastUpdate = Date.now();
 };
 
+var UPDATE_AMOUNT = 1000 / 70;
 Creature.prototype.update = function() {
   var that = this;
+
+  var now = Date.now();
+
+  if (now - this.lastUpdate < UPDATE_AMOUNT) {
+    return
+  }
+
+  this.lastUpdate = now;
 
   this.head.update();
 
   this.parts.forEach(function(p) {
+    p.resetForces();
+    p.addLeaderForce();
+
+    that.parts.forEach(function(otherP) {
+      p.bounce(otherP);
+    });
+
     p.update();
   });
 };
