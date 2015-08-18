@@ -1,11 +1,9 @@
 var creature;
 
 void setup() {
-  var width = 1280;
-  var height = 800;
-	size(width, height);
+	size(window.innerWidth, window.innerHeight);
   var location = new PVector(width/2, height/2);
-  creature = new Creature(location, 40, false);
+  creature = new Creature(location, 400, false);
 }
 
 void draw() {
