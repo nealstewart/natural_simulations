@@ -1,6 +1,7 @@
-var BEHIND_ADJUSTMENT = 5;
+var BEHIND_ADJUSTMENT = 2;
 var PART_SIZE = 5;
 var BOUNCE_FORCE = 5;
+var SPRING_CONSTANT = 0.2;
 
 var Part = function(leader) {
   this.leader = leader;
@@ -15,7 +16,6 @@ Part.prototype.getInitialVelocity = function() {
   return new PVector(-20, 0)
 };
 
-var SPRING_CONSTANT = 0.10;
 Part.prototype.getSpringForce = function() {
   var acc = PVector.sub(this.leader.position, this.position);
 
