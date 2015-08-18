@@ -1,13 +1,22 @@
 var BUBBLE_FORCE = 2;
 var STATES = {
   IN_MIDDLE: "IN_MIDDLE",
-  REVERSING: "REVERSING",
+  REVERSING: "REVERSING"
 };
+
+var MAX_VELOCITY_ON_AXIS = 30
+
+function randomVelocity() {
+  return new PVector(
+      random(MAX_VELOCITY_ON_AXIS) - MAX_VELOCITY_ON_AXIS / 2,
+      random(MAX_VELOCITY_ON_AXIS) - MAX_VELOCITY_ON_AXIS / 2
+  );
+}
 
 var Head = function(position, shouldDisplay) {
   this.shouldDisplay = shouldDisplay;
   this.position = position;
-  this.velocity = new PVector(random(10), -random(10));
+  this.velocity = randomVelocity();
 
   this.x = {
     acceleration: new PVector(0, 0),
