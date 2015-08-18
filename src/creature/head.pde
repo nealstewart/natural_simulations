@@ -1,10 +1,9 @@
 var BUBBLE_FORCE = 2;
+var MAX_VELOCITY_ON_AXIS = 30
 var STATES = {
   IN_MIDDLE: "IN_MIDDLE",
   REVERSING: "REVERSING"
 };
-
-var MAX_VELOCITY_ON_AXIS = 30
 
 function randomVelocity() {
   return new PVector(
@@ -19,19 +18,19 @@ var Head = function(position, shouldDisplay) {
   this.velocity = randomVelocity();
 
   this.x = {
-    acceleration: new PVector(0, 0),
+    acceleration: 0,
     state: STATES.IN_MIDDLE
   };
 
   this.y = {
-    acceleration: new PVector(0, 0),
+    acceleration: 0,
     state: STATES.IN_MIDDLE
   };
 };
 
 Head.prototype.update = function() {
-  this.velocity.add(this.x.acceleration);
-  this.velocity.add(this.y.acceleration);
+  var bubble = new PVector(this.x.acceleration, this.y.acceleration);
+  this.velocity.add(bubble);
   this.velocity.limit(5);
   this.position.add(this.velocity);
   this.checkEdges();
@@ -41,36 +40,45 @@ Head.prototype.display = function() {
   ellipse(this.position.x, this.position.y, 48, 48);
 };
 
+function accToKeepWithin(position, currentState, maximum) {
+  var newState;
+  if (currentState.state == STATES.IN_MIDDLE) {
+    if (position > maximum) {
+      newState = {
+        state: STATES.REVERSING,
+        acceleration: -BUBBLE_FORCE
+      };
+      return newState;
+
+    } else if (position < 0) {
+      newState = {
+        state: STATES.REVERSING,
+        acceleration: BUBBLE_FORCE
+      };
+      return newState;
+
+    } else {
+      newState = currentState;
+      return newState;
+    }
+
+  } else if (currentState.state == STATES.REVERSING) {
+    if (position < maximum && position >= 0) {
+      var newState = {
+        state: STATES.IN_MIDDLE,
+        acceleration: 0
+      };
+      return newState;
+
+    } else {
+      newState = currentState;
+      return newState;
+    }
+  }
+}
 
 Head.prototype.checkEdges = function() {
-  if (this.x.state == STATES.IN_MIDDLE) {
-    if (this.position.x > width) {
-      this.x.state = STATES.REVERSING;
-      this.x.acceleration = new PVector(-BUBBLE_FORCE, 0);
-    } else if (this.position.x < 0) {
-      this.x.state = STATES.REVERSING;
-      this.x.acceleration = new PVector(BUBBLE_FORCE, 0);
-    }
-  } else if (this.x.state == STATES.REVERSING) {
-    if (this.position.x < width && this.position.x >= 0) {
-      this.x.state = STATES.IN_MIDDLE;
-      this.x.acceleration = new PVector(0, 0);
-    }
-  }
-
-  if (this.y.state == STATES.IN_MIDDLE) {
-    if (this.position.y > height) {
-      this.y.state = STATES.REVERSING;
-      this.y.acceleration = new PVector(0, -BUBBLE_FORCE);
-    } else if (this.position.y < 0) {
-      this.y.state = STATES.REVERSING;
-      this.y.acceleration = new PVector(0, BUBBLE_FORCE);
-    }
-  } else if (this.y.state == STATES.REVERSING) {
-    if (this.position.y < height && this.position.y >= 0) {
-      this.y.state = STATES.IN_MIDDLE;
-      this.y.acceleration = new PVector(0, 0);
-    }
-  }
+  this.x = accToKeepWithin(this.position.x, this.x, width);
+  this.y = accToKeepWithin(this.position.y, this.y, height);
 };
 
