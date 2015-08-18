@@ -10,9 +10,9 @@ Just a bit of fun with simple vector addition.
 ## Suggested
 
 To run, host a static file server from the project root directory and open the
-web server in your brower.
+web server in your browser.
 
-I suggest using the SimpleHTTPServer that comes with python.
+I suggest using Python's SimpleHTTPServer.
 
 ```bash
 python -m SimpleHTTPServer 8080
