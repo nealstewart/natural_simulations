@@ -1,6 +1,6 @@
 var BEHIND_ADJUSTMENT = 5;
-
 var PART_SIZE = 5;
+var BOUNCE_FORCE = 5;
 
 var Part = function(leader) {
   this.leader = leader;
@@ -32,8 +32,7 @@ Part.prototype.addLeaderForce = function() {
   this.forces.push(this.getSpringForce());
 };
 
-var BOUNCE_FORCE = 5;
-
+// XXX: Not done yet.
 Part.prototype.bounce = function(p) {
   if (this === p) {
     return;
@@ -52,6 +51,9 @@ Part.prototype.bounce = function(p) {
 
 Part.prototype.update = function() {
   var that = this;
+
+  this.resetForces();
+  this.addLeaderForce();
 
   this.forces.forEach(function(f) {
     that.velocity.add(f);

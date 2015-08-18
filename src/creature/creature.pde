@@ -11,7 +11,7 @@ var Creature = function(location, partCount, displayHead) {
   this.parts = [firstPart]
   var prevPart = firstPart;
 
-  for (var i = 0; i < 40; i++) {
+  for (var i = 1; i < partCount; i++) {
     var newPart = new Part(prevPart);
     prevPart = newPart;
     this.parts.push(newPart);
@@ -33,8 +33,6 @@ Creature.prototype.update = function() {
   this.head.update();
 
   this.parts.forEach(function(p) {
-    p.resetForces();
-    p.addLeaderForce();
     p.update();
   });
 };
