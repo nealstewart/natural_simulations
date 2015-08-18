@@ -65,7 +65,8 @@ Part.prototype.update = function() {
 };
 
 Part.prototype.display = function() {
-  ellipse(this.position.x, this.position.y, PART_SIZE, PART_SIZE);
+  var diff = PVector.sub(this.leader.position, this.position);
+  line(this.leader.position.x, this.leader.position.y, this.position.x, this.position.y);
 };
 
 function getPositionBehind(position, velocity) {
