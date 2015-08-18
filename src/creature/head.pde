@@ -37,6 +37,10 @@ Head.prototype.update = function() {
 };
 
 Head.prototype.display = function() {
+  if (!this.shouldDisplay) {
+    return;
+  }
+
   ellipse(this.position.x, this.position.y, 48, 48);
 };
 
@@ -48,33 +52,30 @@ function accToKeepWithin(position, currentState, maximum) {
         state: STATES.REVERSING,
         acceleration: -BUBBLE_FORCE
       };
-      return newState;
 
     } else if (position < 0) {
       newState = {
         state: STATES.REVERSING,
         acceleration: BUBBLE_FORCE
       };
-      return newState;
 
     } else {
       newState = currentState;
-      return newState;
     }
 
   } else if (currentState.state == STATES.REVERSING) {
     if (position < maximum && position >= 0) {
-      var newState = {
+      newState = {
         state: STATES.IN_MIDDLE,
         acceleration: 0
       };
-      return newState;
 
     } else {
       newState = currentState;
-      return newState;
     }
   }
+
+  return newState;
 }
 
 Head.prototype.checkEdges = function() {
