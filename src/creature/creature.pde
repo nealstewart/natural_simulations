@@ -1,4 +1,4 @@
-var UPDATE_INTERVAL = 1000 / 70;
+var UPDATE_INTERVAL = 1000 / 60;
 
 var STROKE = 0;
 var WEIGHT = 0;

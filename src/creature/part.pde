@@ -2,6 +2,7 @@ var BEHIND_ADJUSTMENT = 2;
 var PART_SIZE = 5;
 var BOUNCE_FORCE = 5;
 var SPRING_CONSTANT = 0.2;
+var MAX_SPEED = 7;
 
 var Part = function(leader) {
   this.leader = leader;
@@ -59,7 +60,7 @@ Part.prototype.update = function() {
     that.velocity.add(f);
   });
 
-  this.velocity.limit(20);
+  this.velocity.limit(MAX_SPEED);
 
   this.position.add(this.velocity);
 };
@@ -67,6 +68,7 @@ Part.prototype.update = function() {
 Part.prototype.display = function() {
   var diff = PVector.sub(this.leader.position, this.position);
   line(this.leader.position.x, this.leader.position.y, this.position.x, this.position.y);
+  ellipse(this.position.x, this.position.y, 5, 5);
 };
 
 function getPositionBehind(position, velocity) {
