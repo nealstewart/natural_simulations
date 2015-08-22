@@ -1,12 +1,11 @@
 import processing.opengl.*;
 
-var creature;
+var aquarium;
 var time;
 
 void setup() {
 	size(window.innerWidth, window.innerHeight, OPENGL);
-  var location = new PVector(width/2, height/2);
-  creature = new Creature(location, 30, false);
+  aquarium = new Aquarium();
 }
 
 void draw() {
@@ -19,8 +18,8 @@ void draw() {
   var steps = time.getSteps();
 
   for (var i = 0; i < steps; i++) {
-    creature.update();
+    aquarium.update();
   }
 
-  creature.display();
+  aquarium.display();
 }
