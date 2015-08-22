@@ -2,14 +2,19 @@ var BEHIND_ADJUSTMENT = 2;
 var PART_SIZE = 5;
 var BOUNCE_FORCE = 5;
 var SPRING_CONSTANT = 0.2;
-var MAX_SPEED = 7;
+
+// distance units per tick
+var MAX_SPEED = 6;
+
+var STROKE = 0;
+var WEIGHT = 0;
+var FILL = 127;
 
 var Part = function(leader) {
   this.leader = leader;
   this.position = getPositionBehind(leader.position, leader.velocity);
   this.acceleration = new PVector(0, 0);
   this.velocity = this.getInitialVelocity();
-  this.resetForces();
 };
 
 // TODO: Make this perpendicular to the velocity of the leader.
@@ -23,10 +28,6 @@ Part.prototype.getSpringForce = function() {
   acc.mult(SPRING_CONSTANT);
 
   return acc;
-};
-
-Part.prototype.resetForces = function() {
-  this.forces = [];
 };
 
 Part.prototype.addLeaderForce = function() {
@@ -53,12 +54,7 @@ Part.prototype.bounce = function(p) {
 Part.prototype.update = function() {
   var that = this;
 
-  this.resetForces();
-  this.addLeaderForce();
-
-  this.forces.forEach(function(f) {
-    that.velocity.add(f);
-  });
+  that.velocity.add(this.getSpringForce());
 
   this.velocity.limit(MAX_SPEED);
 
@@ -66,8 +62,11 @@ Part.prototype.update = function() {
 };
 
 Part.prototype.display = function() {
+  stroke(STROKE);
+  strokeWeight(WEIGHT);
+  fill(FILL);
+
   var diff = PVector.sub(this.leader.position, this.position);
-  line(this.leader.position.x, this.leader.position.y, this.position.x, this.position.y);
   ellipse(this.position.x, this.position.y, 5, 5);
 };
 

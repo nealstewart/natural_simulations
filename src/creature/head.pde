@@ -1,5 +1,8 @@
 var BUBBLE_FORCE = 2;
 var MAX_VELOCITY_ON_AXIS = 30
+// distance units per tick
+var MAX_SPEED = 5;
+
 var STATES = {
   IN_MIDDLE: "IN_MIDDLE",
   REVERSING: "REVERSING"
@@ -12,26 +15,34 @@ function randomVelocity() {
   );
 }
 
+var STATE_A = {
+  acceleration: 0,
+  state: STATES.IN_MIDDLE
+};
+
+var STATE_B = {
+  state: STATES.REVERSING,
+  acceleration: -BUBBLE_FORCE
+};
+
+var STATE_C = {
+  state: STATES.REVERSING,
+  acceleration: BUBBLE_FORCE
+};
+
 var Head = function(position, shouldDisplay) {
   this.shouldDisplay = shouldDisplay;
   this.position = position;
   this.velocity = randomVelocity();
 
-  this.x = {
-    acceleration: 0,
-    state: STATES.IN_MIDDLE
-  };
-
-  this.y = {
-    acceleration: 0,
-    state: STATES.IN_MIDDLE
-  };
+  this.x = STATE_A;
+  this.y = STATE_A;
 };
 
 Head.prototype.update = function() {
   var bubble = new PVector(this.x.acceleration, this.y.acceleration);
   this.velocity.add(bubble);
-  this.velocity.limit(5);
+  this.velocity.limit(MAX_SPEED);
   this.position.add(this.velocity);
   this.checkEdges();
 };
@@ -48,16 +59,10 @@ function accToKeepWithin(position, currentState, maximum) {
   var newState;
   if (currentState.state == STATES.IN_MIDDLE) {
     if (position > maximum) {
-      newState = {
-        state: STATES.REVERSING,
-        acceleration: -BUBBLE_FORCE
-      };
+      newState = STATE_B;
 
     } else if (position < 0) {
-      newState = {
-        state: STATES.REVERSING,
-        acceleration: BUBBLE_FORCE
-      };
+      newState = STATE_C;
 
     } else {
       newState = currentState;
@@ -65,10 +70,7 @@ function accToKeepWithin(position, currentState, maximum) {
 
   } else if (currentState.state == STATES.REVERSING) {
     if (position < maximum && position >= 0) {
-      newState = {
-        state: STATES.IN_MIDDLE,
-        acceleration: 0
-      };
+      newState = STATE_A;
 
     } else {
       newState = currentState;

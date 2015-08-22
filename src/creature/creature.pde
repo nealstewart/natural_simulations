@@ -1,9 +1,3 @@
-var UPDATE_INTERVAL = 1000 / 60;
-
-var STROKE = 0;
-var WEIGHT = 0;
-var FILL = 127;
-
 var Creature = function(location, partCount, displayHead) {
   this.head = new Head(location, displayHead);
 
@@ -23,13 +17,6 @@ var Creature = function(location, partCount, displayHead) {
 Creature.prototype.update = function() {
   var that = this;
 
-  var now = Date.now();
-  if (now - this.lastUpdate < UPDATE_INTERVAL) {
-    return
-  }
-
-  this.lastUpdate = now;
-
   this.head.update();
 
   this.parts.forEach(function(p) {
@@ -38,10 +25,6 @@ Creature.prototype.update = function() {
 };
 
 Creature.prototype.display = function() {
-  stroke(STROKE);
-  strokeWeight(WEIGHT);
-  fill(FILL);
-
   this.head.display();
   for (var i = 0, len = this.parts.length; i < len; i++) {
     this.parts[i].display();
