@@ -27,7 +27,8 @@ Creature.prototype.update = function() {
 
 Creature.prototype.display = function() {
   this.head.display();
+  var c = this.head.getColor();
   for (var i = 0, len = this.parts.length; i < len; i++) {
-    this.parts[i].display();
+    this.parts[i].display(c);
   }
 };

@@ -1,10 +1,10 @@
 var BEHIND_ADJUSTMENT = 2;
 var PART_SIZE = 5;
 var BOUNCE_FORCE = 5;
-var SPRING_CONSTANT = 0.2;
+var SPRING_CONSTANT = 0.1;
 
 // distance units per tick
-var MAX_SPEED = 6;
+var MAX_SPEED = 5;
 
 var STROKE = 0;
 var WEIGHT = 0;
@@ -61,11 +61,11 @@ Part.prototype.update = function() {
   this.position.add(this.velocity);
 };
 
-Part.prototype.display = function() {
+Part.prototype.display = function(c) {
   pushMatrix();
   translate(this.position.x, this.position.y, this.position.z);
   noStroke();
-  fill(204, 0);
+  fill(c);
   sphere(3);
   popMatrix();
 };

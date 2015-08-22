@@ -44,6 +44,7 @@ void draw() {
   }
 
   pushMatrix();
+  translate(100, 200, -1000)
   aquarium.display(rotation);
   popMatrix();
 }

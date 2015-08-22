@@ -1,5 +1,5 @@
 var BUBBLE_FORCE = 2;
-var MAX_SPEED = 5;
+var MAX_SPEED = 10;
 
 var STATES = {
   IN_MIDDLE: "IN_MIDDLE",
@@ -7,8 +7,7 @@ var STATES = {
 };
 
 function randomVelocity() {
-  var vector = new PVector(MAX_SPEED, 0);
-  vector.rotate(random(2 * PI));
+  var vector = new PVector(2, 3, 1);
   return vector;
 }
 
@@ -35,22 +34,39 @@ var Head = function(aquarium, position, shouldDisplay) {
 
   this.x = STATE_A;
   this.y = STATE_A;
+  this.z = STATE_A;
 };
 
 Head.prototype.update = function() {
-  var bubble = new PVector(this.x.acceleration, this.y.acceleration);
+  var bubble = new PVector(
+    this.x.acceleration,
+    this.y.acceleration,
+    this.z.acceleration
+  );
   this.velocity.add(bubble);
   this.velocity.limit(MAX_SPEED);
   this.position.add(this.velocity);
   this.checkEdges();
 };
 
-Head.prototype.display = function() {
-  if (!this.shouldDisplay) {
-    return;
-  }
+var RED = color(255, 0, 0);
+var GRAY = color(128, 128, 128);
 
-  ellipse(this.position.x, this.position.y, 48, 48);
+Head.prototype.getColor = function() {
+  var isReversing = this.x.state === STATES.REVERSING || this.y.state == STATES.REVERSING || this.z.state == STATES.REVERSING;
+  if (isReversing) {
+    return RED;
+  } else {
+    return GRAY;
+  }
+};
+
+Head.prototype.display = function() {
+  pushMatrix();
+  translate(this.position.x, this.position.y, this.position.z);
+  fill(this.getColor());
+  sphere(10);
+  popMatrix();
 };
 
 function accToKeepWithin(position, currentState, maximum) {
@@ -81,4 +97,5 @@ function accToKeepWithin(position, currentState, maximum) {
 Head.prototype.checkEdges = function() {
   this.x = accToKeepWithin(this.position.x, this.x, this.aquarium.dimensions.x);
   this.y = accToKeepWithin(this.position.y, this.y, this.aquarium.dimensions.y);
+  this.z = accToKeepWithin(this.position.z, this.z, this.aquarium.dimensions.z);
 };

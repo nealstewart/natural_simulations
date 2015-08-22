@@ -13,13 +13,10 @@ Aquarium.prototype.update = function() {
 
 Aquarium.prototype.display = function(rotation) {
   pushMatrix();
-  noFill();
-  stroke(125);
-  // move out
-  translate(100, 200, -3000)
-  // draw the box
   rotateX(rotation.x); 
   rotateY(rotation.y); 
+  stroke(125);
+  noFill();
   box(this.dimensions.x, this.dimensions.y, this.dimensions.z);
   translate(-this.dimensions.x/2, -this.dimensions.y/2, -this.dimensions.z/2)
   this.creature.display();
