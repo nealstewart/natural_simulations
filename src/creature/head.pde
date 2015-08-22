@@ -1,6 +1,4 @@
 var BUBBLE_FORCE = 2;
-var MAX_VELOCITY_ON_AXIS = 30
-// distance units per tick
 var MAX_SPEED = 5;
 
 var STATES = {
@@ -9,10 +7,9 @@ var STATES = {
 };
 
 function randomVelocity() {
-  return new PVector(
-      random(MAX_VELOCITY_ON_AXIS) - MAX_VELOCITY_ON_AXIS / 2,
-      random(MAX_VELOCITY_ON_AXIS) - MAX_VELOCITY_ON_AXIS / 2
-  );
+  var vector = new PVector(MAX_SPEED, 0);
+  vector.rotate(random(2 * PI));
+  return vector;
 }
 
 var STATE_A = {
