@@ -64,8 +64,8 @@ Part.prototype.update = function() {
 Part.prototype.display = function() {
   pushMatrix();
   translate(this.position.x, this.position.y, this.position.z);
-  fill(204, 102, 0);
   noStroke();
+  fill(204, 0);
   sphere(3);
   popMatrix();
 };

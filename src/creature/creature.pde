@@ -1,5 +1,6 @@
-var Creature = function(location, partCount, displayHead) {
-  this.head = new Head(location, displayHead);
+var Creature = function(aquarium, location, partCount, displayHead) {
+  this.aquarium = aquarium;
+  this.head = new Head(aquarium, location, displayHead);
 
   var firstPart = new Part(this.head);
   this.parts = [firstPart]

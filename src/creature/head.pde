@@ -27,7 +27,8 @@ var STATE_C = {
   acceleration: BUBBLE_FORCE
 };
 
-var Head = function(position, shouldDisplay) {
+var Head = function(aquarium, position, shouldDisplay) {
+  this.aquarium = aquarium;
   this.shouldDisplay = shouldDisplay;
   this.position = position;
   this.velocity = randomVelocity();
@@ -78,7 +79,6 @@ function accToKeepWithin(position, currentState, maximum) {
 }
 
 Head.prototype.checkEdges = function() {
-  this.x = accToKeepWithin(this.position.x, this.x, width);
-  this.y = accToKeepWithin(this.position.y, this.y, height);
+  this.x = accToKeepWithin(this.position.x, this.x, this.aquarium.dimensions.x);
+  this.y = accToKeepWithin(this.position.y, this.y, this.aquarium.dimensions.y);
 };
-
