@@ -62,12 +62,12 @@ Part.prototype.update = function() {
 };
 
 Part.prototype.display = function() {
-  stroke(STROKE);
-  strokeWeight(WEIGHT);
-  fill(FILL);
-
-  var diff = PVector.sub(this.leader.position, this.position);
-  ellipse(this.position.x, this.position.y, 5, 5);
+  pushMatrix();
+  translate(this.position.x, this.position.y, 0);
+  fill(204, 102, 0);
+  noStroke();
+  sphere(3);
+  popMatrix();
 };
 
 function getPositionBehind(position, velocity) {
