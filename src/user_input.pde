@@ -10,12 +10,14 @@ function UserInput() {
   this._onBlur = this._onBlur.bind(this);
   this._onTouchMove = this._onTouchMove.bind(this);
   this._onTouchEnd = this._onTouchEnd.bind(this);
+  this._onTouchStart = this._onTouchStart.bind(this);
 
   window.addEventListener("keydown", this._onKeyDown);
   window.addEventListener("focus", this._onFocus);
   window.addEventListener("blur", this._onBlur);
   window.addEventListener("touchmove", this._onTouchMove);
   window.addEventListener("touchend", this._onTouchEnd);
+  window.addEventListener("touchstart", this._onTouchStart);
 }
 
 UserInput.prototype._onKeyDown = function(e) {
@@ -55,11 +57,17 @@ UserInput.prototype._onFocus = function() {
   this.focused = true;
 };
 
+UserInput.prototype._onTouchStart = function(e) {
+  e.preventDefault();
+};
+
 UserInput.prototype._onTouchEnd = function(e) {
+  e.preventDefault();
   this.lastPosition = null;
 };
 
 UserInput.prototype._onTouchMove = function(e) {
+  e.preventDefault();
   var touch = e.touches[0];
   this._trackDrag(touch.clientX, touch.clientY);
 };
