@@ -61,7 +61,7 @@ UserInput.prototype._onTouchEnd = function(e) {
 
 UserInput.prototype._onTouchMove = function(e) {
   var touch = e.touches[0];
-  this._trackDrag(touch.offsetX, touch.offsetY);
+  this._trackDrag(touch.clientX, touch.clientY);
 };
 
 UserInput.prototype._trackDrag = function(x, y) {
