@@ -1,4 +1,5 @@
 var Creature = function(aquarium, location, partCount, displayHead) {
+  this.attractor = null;
   this.aquarium = aquarium;
   this.head = new Head(aquarium, location, displayHead);
 
@@ -18,11 +19,23 @@ var Creature = function(aquarium, location, partCount, displayHead) {
 Creature.prototype.update = function() {
   var that = this;
 
-  this.head.update();
+  this.head.update(this.attractor.food);
 
   this.parts.forEach(function(p) {
     p.update();
   });
+
+  this.attractor = null;
+};
+
+Creature.prototype.attract = function(f) {
+  var dis = this.head.position.dist(f.position);
+  if (!this.attractor || this.attractor.dis > dis) {
+    this.attractor = {
+      food: f,
+      dis: dis
+    };
+  }
 };
 
 Creature.prototype.display = function() {

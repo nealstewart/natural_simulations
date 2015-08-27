@@ -37,14 +37,29 @@ var Head = function(aquarium, position, shouldDisplay) {
   this.z = STATE_A;
 };
 
-Head.prototype.update = function() {
+var ATTRACTION_ADJUSTMENT = 2;
+
+Head.prototype.getAttraction = function(attractor) {
+  var myPos = this.position.get();
+  var force = attractor.position.get();
+  force.sub(myPos);
+  force.normalize();
+  force.mult(ATTRACTION_ADJUSTMENT);
+  return force;
+}
+
+Head.prototype.update = function(attractor) {
   var bubble = new PVector(
     this.x.acceleration,
     this.y.acceleration,
     this.z.acceleration
   );
+
   this.velocity.add(bubble);
+  this.velocity.add(this.getAttraction(attractor));
+
   this.velocity.limit(MAX_SPEED);
+
   this.position.add(this.velocity);
   this.checkEdges();
 };

@@ -66,7 +66,7 @@ Part.prototype.display = function(c) {
   translate(this.position.x, this.position.y, this.position.z);
   noStroke();
   fill(c);
-  sphere(3);
+  sphere(PART_SIZE);
   popMatrix();
 };
 
