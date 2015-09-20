@@ -20,12 +20,11 @@ function Aquarium() {
   location.div(2);
 
   for (var i = 0; i < 10; i++) {
-    var f = new Food();
-    f.position = getRandomLocation(this.dimensions);
+    var f = new Food(getRandomLocation(this.dimensions));
     this.foods.push(f);
   }
 
-  this.creature = new Creature(this, location, 50, false);
+  this.creature = new Creature(this, location, 3, false);
 }
 
 Aquarium.prototype.update = function() {
@@ -34,6 +33,16 @@ Aquarium.prototype.update = function() {
   }
 
   this.creature.update();
+
+  var newFood = [];
+  for (var i = 0, len = this.foods.length; i < len; i++) {
+    var f = this.foods[i];
+    if (f.isAlive()) {
+      newFood.push(f);
+    }
+  }
+
+  this.foods = newFood;
 };
 
 Aquarium.prototype.display = function(rotation) {

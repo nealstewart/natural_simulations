@@ -1,7 +1,8 @@
 var BEHIND_ADJUSTMENT = 2;
 var PART_SIZE = 5;
 var BOUNCE_FORCE = 5;
-var SPRING_CONSTANT = 0.1;
+var SPRING_CONSTANT = 0.02;
+var SPRING_LIMIT = 10;
 
 // distance units per tick
 var MAX_SPEED = 5;
@@ -25,9 +26,13 @@ Part.prototype.getInitialVelocity = function() {
 Part.prototype.getSpringForce = function() {
   var acc = PVector.sub(this.leader.position, this.position);
 
-  acc.mult(SPRING_CONSTANT);
-
-  return acc;
+  if (acc.mag() < SPRING_LIMIT) {
+    acc.mult(-SPRING_CONSTANT);
+    return acc;
+  } else {
+    acc.mult(SPRING_CONSTANT);
+    return acc;
+  }
 };
 
 Part.prototype.addLeaderForce = function() {

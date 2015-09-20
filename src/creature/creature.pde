@@ -1,25 +1,38 @@
-var Creature = function(aquarium, location, partCount, displayHead) {
-  this.attractor = null;
-  this.aquarium = aquarium;
-  this.head = new Head(aquarium, location, displayHead);
+var CREATURE_STATES = {
+  EATING: "EATING"
+};
 
-  var firstPart = new Part(this.head);
-  this.parts = [firstPart]
+var Creature = function(aquarium, location, partCount, displayHead) {
+  this.state = CREATURE_STATES.EATING;
+  this.attractor = null;
+  this.head = new Head(aquarium, location, displayHead);
+  this.parts = makeParts(this.head, partCount);
+  this.lastUpdate = Date.now();
+};
+
+function makeParts(head, partCount) {
+  var firstPart = new Part(head);
+  var parts = [firstPart];
+
   var prevPart = firstPart;
 
   for (var i = 1; i < partCount; i++) {
     var newPart = new Part(prevPart);
     prevPart = newPart;
-    this.parts.push(newPart);
+    parts.push(newPart);
   }
 
-  this.lastUpdate = Date.now();
-};
+  return parts;
+}
 
 Creature.prototype.update = function() {
   var that = this;
 
   this.head.update(this.attractor.food);
+
+  if (!this.attractor.food.isAlive()) {
+    this.parts.push(new Part(this.parts[this.parts.length - 1]));
+  }
 
   this.parts.forEach(function(p) {
     p.update();
