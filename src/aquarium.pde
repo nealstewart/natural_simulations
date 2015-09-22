@@ -2,7 +2,7 @@ var WIDTH = 1000;
 var HEIGHT = 1000;
 var DEPTH = 1000;
 
-var DISABLE_CRAETURE = true;
+var DISABLE_CRAETURE = false;
 
 function getRandomLocation(dimensions) {
   var position = new PVector(
@@ -43,6 +43,12 @@ Aquarium.prototype._updateCreature = function() {
 
 Aquarium.prototype._updateFood = function() {
   var newFood = [];
+
+  for (var i = 0, len = this.herbivores.length; i < len; i++) {
+    var h = this.herbivores[i];
+    h.update();
+  }
+
   for (var i = 0, len = this.herbivores.length; i < len; i++) {
     var h = this.herbivores[i];
     if (h.isAlive()) {
