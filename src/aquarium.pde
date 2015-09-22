@@ -2,6 +2,8 @@ var WIDTH = 1000;
 var HEIGHT = 1000;
 var DEPTH = 1000;
 
+var DISABLE_CRAETURE = true;
+
 function getRandomLocation(dimensions) {
   var position = new PVector(
       floor(random(0, dimensions.x)),
@@ -14,35 +16,47 @@ function getRandomLocation(dimensions) {
 function Aquarium() {
   this.position = new PVector(0, 0, 0);
   this.dimensions = new PVector(WIDTH, HEIGHT, DEPTH);
-  this.foods = [];
+  this.herbivores = [];
 
   var location = this.dimensions.get();
   location.div(2);
 
   for (var i = 0; i < 10; i++) {
-    var f = new Food(getRandomLocation(this.dimensions));
-    this.foods.push(f);
+    var h = new Herbivore(getRandomLocation(this.dimensions));
+    this.herbivores.push(h);
   }
 
   this.creature = new Creature(this, location, 3, false);
 }
 
-Aquarium.prototype.update = function() {
-  for (var i = 0, len = this.foods.length; i < len; i++) {
-    this.creature.attract(this.foods[i]);
+Aquarium.prototype._updateCreature = function() {
+  if (DISABLE_CRAETURE) {
+    return;
+  }
+
+  for (var i = 0, len = this.herbivores.length; i < len; i++) {
+    this.creature.attract(this.herbivores[i]);
   }
 
   this.creature.update();
+};
 
+Aquarium.prototype._updateFood = function() {
   var newFood = [];
-  for (var i = 0, len = this.foods.length; i < len; i++) {
-    var f = this.foods[i];
-    if (f.isAlive()) {
-      newFood.push(f);
+  for (var i = 0, len = this.herbivores.length; i < len; i++) {
+    var h = this.herbivores[i];
+    if (h.isAlive()) {
+      newFood.push(h);
     }
   }
 
-  this.foods = newFood;
+  return newFood;
+};
+
+Aquarium.prototype.update = function() {
+  this._updateCreature();
+
+  this.herbivores = this._updateFood();
 };
 
 Aquarium.prototype.display = function(rotation) {
@@ -60,12 +74,14 @@ Aquarium.prototype.display = function(rotation) {
   box(this.dimensions.x, this.dimensions.y, this.dimensions.z);
 
   // Translate into the coordinate system of the box.
-  translate(-this.dimensions.x/2, -this.dimensions.y/2, -this.dimensions.z/2)
+  translate(-this.dimensions.x/2, -this.dimensions.y/2, -this.dimensions.z/2);
 
-  this.creature.display();
+  if (!DISABLE_CRAETURE) {
+    this.creature.display();
+  }
 
-  for (var i = 0, len = this.foods.length; i < len; i++) {
-    this.foods[i].display(); 
+  for (var i = 0, len = this.herbivores.length; i < len; i++) {
+    this.herbivores[i].display(); 
   }
 
   popMatrix();
