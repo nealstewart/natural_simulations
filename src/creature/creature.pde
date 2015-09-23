@@ -7,7 +7,6 @@ var Creature = function(aquarium, location, partCount, displayHead) {
   this.attractor = null;
   this.head = new Head(aquarium, location, displayHead);
   this.parts = makeParts(this.head, partCount);
-  this.lastUpdate = Date.now();
 };
 
 function makeParts(head, partCount) {

@@ -2,20 +2,11 @@ var HERBIVORE_SIZE = 10;
 var HERBIVORE_COLOR = 100;
 var HERBIVORE_LIFE = 100;
 var HERBIVORE_STEP_SIZE = 30;
-
-var monteCarlo = function() {
-  while (true) {
-    var r1 = random(1);
-    var probability = r1;
-    var r2 = random(1);
-    if (r2 > probability) {
-      return r1;
-    }
-  }
-};
+var HERBIVORE_SPEED_LIMIT = 8;
 
 function Herbivore(position) {
   this.position = position;
+  this.velocity = new PVector(0, 0, 0);
   this.life = HERBIVORE_LIFE;
 }
 
@@ -35,13 +26,15 @@ Herbivore.prototype.update = function() {
 
   var stepSize = monteCarlo() * HERBIVORE_STEP_SIZE;
 
-  var xStepSize = random(-stepSize, stepSize);
-  var yStepSize = random(-stepSize, stepSize);
-  var zStepSize = random(-stepSize, stepSize);
+  var acceleration = new PVector(
+      random(-stepSize, stepSize),
+      random(-stepSize, stepSize),
+      random(-stepSize, stepSize)
+  );
 
-  this.position.x += xStepSize;
-  this.position.y += yStepSize;
-  this.position.z += zStepSize;
+  this.velocity.add(acceleration);
+  this.velocity.limit(HERBIVORE_SPEED_LIMIT);
+  this.position.add(this.velocity);
 };
 
 Herbivore.prototype.hurt = function() {
