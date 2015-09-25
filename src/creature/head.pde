@@ -1,9 +1,9 @@
 var RED = color(255, 0, 0);
 var GRAY = color(128, 128, 128);
 
-var MAX_SPEED = 10;
-var ATTRACTION_ADJUSTMENT = 10;
-var SIZE = 10;
+var HEAD_MAX_SPEED = 5;
+var HEAD_ATTRACTION_ADJUSTMENT = 10;
+var HEAD_SIZE = 10;
 
 var STATES = {
   IN_MIDDLE: "IN_MIDDLE",
@@ -15,6 +15,7 @@ var Head = function(aquarium, position, shouldDisplay) {
   this.shouldDisplay = shouldDisplay;
   this.position = position;
   this.velocity = new PVector(0,0,0);
+  this.size = HEAD_SIZE;
 };
 
 Head.prototype.getAttraction = function(attractor) {
@@ -25,7 +26,7 @@ Head.prototype.getAttraction = function(attractor) {
   var force = attractor.position.get();
   force.sub(myPos);
   force.normalize();
-  force.mult(ATTRACTION_ADJUSTMENT);
+  force.mult(HEAD_ATTRACTION_ADJUSTMENT);
   return force;
 }
 
@@ -38,7 +39,7 @@ Head.prototype.update = function(attractor) {
 
   } else {
     this.velocity.add(this.getAttraction(attractor));
-    this.velocity.limit(MAX_SPEED);
+    this.velocity.limit(HEAD_MAX_SPEED);
     this.position.add(this.velocity);
   }
 };
@@ -51,6 +52,6 @@ Head.prototype.display = function() {
   pushMatrix();
   translate(this.position.x, this.position.y, this.position.z);
   fill(this.getColor());
-  sphere(SIZE);
+  sphere(HEAD_SIZE);
   popMatrix();
 };
