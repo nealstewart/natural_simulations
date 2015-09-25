@@ -8,3 +8,11 @@ function monteCarlo() {
     }
   }
 }
+
+void constrainVector(a, limits, s) {
+  PVector newA = a.get();
+  newA.x = constrain(a.x, 0, limits.x - s);
+  newA.y = constrain(a.y, 0, limits.y - s);
+  newA.z = constrain(a.z, 0, limits.z - s);
+  return newA;
+}
