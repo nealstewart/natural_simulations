@@ -1,6 +1,6 @@
-var WIDTH = 1000;
+var WIDTH = 4000;
 var HEIGHT = 1000;
-var DEPTH = 1000;
+var DEPTH = 3000;
 
 var DISABLE_CRAETURE = false;
 var AQUARIUM_DIMENSIONS = new PVector(WIDTH, HEIGHT, DEPTH)
@@ -77,18 +77,8 @@ Aquarium.prototype.update = function() {
   this.herbivores = this._updateFood();
 };
 
-Aquarium.prototype.display = function(rotation) {
+Aquarium.prototype.display = function() {
   pushMatrix();
-  background(255, 255, 255);
-
-  translate(window.innerWidth/2, window.innerHeight/2);
-  translate(0, 0, -1000)
-
-  rotateX(rotation.x); 
-  rotateY(rotation.y); 
-
-  stroke(125);
-  noFill();
   box(AQUARIUM_DIMENSIONS.x, AQUARIUM_DIMENSIONS.y, AQUARIUM_DIMENSIONS.z);
 
   // Translate into the coordinate system of the box.

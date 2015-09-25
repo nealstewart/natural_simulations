@@ -33,5 +33,20 @@ void draw() {
     return;
   }
 
-  aquarium.display(input.rotation);
+  pushMatrix();
+
+  background(255, 255, 255);
+
+  translate(window.innerWidth/2, window.innerHeight/2);
+  translate(0, 0, -3000)
+
+  rotateX(input.rotation.x); 
+  rotateY(input.rotation.y); 
+
+  stroke(125);
+  noFill();
+
+  aquarium.display();
+
+  popMatrix();
 }
