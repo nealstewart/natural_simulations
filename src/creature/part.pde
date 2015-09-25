@@ -5,7 +5,7 @@ var SPRING_CONSTANT = 0.02;
 var SPRING_LIMIT = 10;
 
 // distance units per tick
-var MAX_SPEED = 5;
+var PART_MAX_SPEED = 5;
 
 var STROKE = 0;
 var WEIGHT = 0;
@@ -61,7 +61,7 @@ Part.prototype.update = function() {
 
   that.velocity.add(this.getSpringForce());
 
-  this.velocity.limit(MAX_SPEED);
+  this.velocity.limit(PART_MAX_SPEED);
 
   this.position.add(this.velocity);
 };
