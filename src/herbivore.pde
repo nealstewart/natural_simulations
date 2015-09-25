@@ -11,8 +11,9 @@ function Herbivore(position) {
   this.velocity = new PVector(0, 0, 0);
   this.life = HERBIVORE_LIFE;
   this.age = 0;
+  this.deathAge = floor(random(HERBIVORE_BREED_LIMIT, HERBIVORE_AGE_LIMIT));
+  this.breedLimit = floor(random(HERBIVORE_BREED_LIMIT / 2, HERBIVORE_BREED_LIMIT));
   this.size = HERBIVORE_SIZE;
-  this._breedTick = 0;
 }
 
 Herbivore.prototype.display = function() {
@@ -53,16 +54,13 @@ Herbivore.prototype._moveUpdate = function() {
 };
 
 Herbivore.prototype._lifeUpdate = function() {
-  this._breedTick += 1;
   this.age += 1;
 };
 
 Herbivore.prototype.breed = function() {
-  if (this._breedTick < HERBIVORE_BREED_LIMIT) {
+  if (this.age % this.breedLimit != 0) {
     return null;
   }
-
-  this._breedTick = 0;
 
   var child = new Herbivore(new PVector(
     this.position.x + HERBIVORE_SIZE,
@@ -78,5 +76,5 @@ Herbivore.prototype.hurt = function() {
 };
 
 Herbivore.prototype.isAlive = function() {
-  return this.life > 0 && this.age < HERBIVORE_AGE_LIMIT;
+  return this.life > 0 && this.age < this.deathAge;
 };

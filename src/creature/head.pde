@@ -51,7 +51,8 @@ Head.prototype.getColor = function() {
 Head.prototype.display = function() {
   pushMatrix();
   translate(this.position.x, this.position.y, this.position.z);
-  fill(this.getColor());
+  noStroke();
+  fill(RED);
   sphere(HEAD_SIZE);
   popMatrix();
 };
