@@ -24,6 +24,7 @@ function Aquarium() {
   this.position = new PVector(0, 0, 0);
   this.herbivores = this._createHerbivores();
   this.creature = new Creature(this, getMiddle(), 3, false);
+  this.plant = new Plant();
 }
 
 Aquarium.prototype._createHerbivores = function() {
@@ -74,6 +75,7 @@ Aquarium.prototype._updateFood = function() {
 
 Aquarium.prototype.update = function() {
   this._updateCreature();
+  this.plant.update();
   this.herbivores = this._updateFood();
 };
 
@@ -98,6 +100,8 @@ Aquarium.prototype.display = function() {
     var thing = things[i];
     thing.position = constrainVector(thing.position, AQUARIUM_DIMENSIONS, thing.size);
   }
+
+  this.plant.display();
 
   popMatrix();
 };
