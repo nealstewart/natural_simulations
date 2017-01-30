@@ -2,12 +2,15 @@ function Plant() {
   this.parts = [
     new PVector(0, 0),
     new PVector(100, 100),
+    new PVector(300, 200),
+    new PVector(300, 200),
+    new PVector(300, 200),
+    new PVector(300, 200),
     new PVector(300, 200)
   ];
 }
 
 Plant.prototype.update = function() {
-  // TODO
 };
 
 Plant.prototype.moveDown = function() {
